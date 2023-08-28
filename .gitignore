@@ -1,0 +1,24 @@
+# Dependency directories
+node_modules
+
+# Environment variables and sensitive data
+.env
+.env.*
+
+# Built output
+build
+
+# Editor and IDE files
+.vscode
+.idea
+
+# Logs
+logs
+*.log
+
+# Mac OS specific files
+.DS_Store
+
+# Production build artifacts
+package-lock.json
+yarn.lock
