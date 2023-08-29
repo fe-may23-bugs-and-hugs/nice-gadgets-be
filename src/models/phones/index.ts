@@ -28,7 +28,7 @@ const getById = async(id: string) => {
   const data = await fs.readFile(phonesPath);
   const phones: Phone[] = JSON.parse(data.toString());
 
-  const result = phones.find(phone => phone.id === id);
+  const result = phones.find((phone) => phone._id === id);
 
   return result || null;
 };
