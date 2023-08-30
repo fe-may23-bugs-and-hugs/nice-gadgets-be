@@ -18,6 +18,8 @@ if (!DB_HOST) {
 
 const app = express();
 
+app.use(express.static('public'));
+
 mongoose
   .connect(DB_HOST)
   .then(() =>
