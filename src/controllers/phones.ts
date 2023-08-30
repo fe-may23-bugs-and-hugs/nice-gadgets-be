@@ -31,4 +31,11 @@ const getById = async(req, res, next) => {
   }
 };
 
-export default { getAll, getById };
+// @ts-ignore
+const getImg = async(req, res) => {
+  const imagePath = req.params.imagePath;
+
+  res.sendFile(imagePath, { root: 'public' });
+};
+
+export default { getAll, getById, getImg };

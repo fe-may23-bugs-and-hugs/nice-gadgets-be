@@ -8,4 +8,6 @@ router.get('/', ctrl.getAll);
 
 router.get('/:id', ctrl.getById);
 
+router.get('/:imagePath', ctrl.getImg);
+
 export default router;
