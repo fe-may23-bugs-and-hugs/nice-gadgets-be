@@ -1,18 +1,22 @@
-/* eslint-disable max-len */
 /* eslint-disable no-console */
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 import phonesRouter from './routes/api/phones';
 import ResponseError from './types/Error';
 
-const PORT = process.env.PORT || 5000;
+dotenv.config();
+
+const { DB_HOST, PORT = 5000 } = process.env;
+
+if (!DB_HOST) {
+  console.error('DB_HOST is not defined in the environment variables.');
+  process.exit(1);
+}
 
 const app = express();
-
-const DB_HOST
-  = 'mongodb+srv://admin:DAo8ysXE0pxSJjPh@cluster0.wyuhxhd.mongodb.net/nice_gadgets?retryWrites=true&w=majority';
 
 mongoose
   .connect(DB_HOST)

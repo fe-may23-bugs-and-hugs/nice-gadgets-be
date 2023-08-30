@@ -6,7 +6,7 @@ import HttpError from '../../helpers/HttpError';
 
 const phonesPath = path.join(__dirname, 'data', 'phones.json');
 
-const getAll = async(page: number, limit: number): Promise<Phone[]> => {
+const getAll = async(page: number, limit: number) => {
   const data = await fs.readFile(phonesPath);
   const phones = JSON.parse(data.toString());
 
@@ -21,7 +21,12 @@ const getAll = async(page: number, limit: number): Promise<Phone[]> => {
   const endIndex = page * limit;
   const phonesOnPage = phones.slice(startIndex, endIndex);
 
-  return phonesOnPage;
+  return {
+    data: phonesOnPage,
+    totalItems,
+    totalPages,
+    currentPage: page,
+  };
 };
 
 const getById = async(id: string) => {
