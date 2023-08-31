@@ -19,7 +19,7 @@ const getAll = async(req, res, next) => {
 const getById = async(req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await phones.getById(id);
+    const result = await phones.getFullPhoneInfo(req, id);
 
     if (!result) {
       throw HttpError(404, 'Not found');
@@ -32,10 +32,14 @@ const getById = async(req, res, next) => {
 };
 
 // @ts-ignore
-const getImg = async(req, res) => {
-  const imagePath = req.params.imagePath;
+const getImg = async(req, res, next) => {
+  try {
+    const imagePath = req.params.imagePath;
 
-  res.sendFile(imagePath, { root: 'public' });
+    res.sendFile(imagePath, { root: 'public' });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export default { getAll, getById, getImg };

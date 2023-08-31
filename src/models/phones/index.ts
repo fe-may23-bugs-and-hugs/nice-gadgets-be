@@ -1,5 +1,7 @@
 import Phone from './phone';
 import HttpError from '../../helpers/HttpError';
+import path from 'path';
+import fs from 'fs/promises';
 
 // @ts-ignore
 const getAll = async(req, page: number, limit: number) => {
@@ -29,19 +31,25 @@ const getAll = async(req, page: number, limit: number) => {
   };
 };
 
-const getById = async(id: string) => {
-  const result = await Phone.findById(id);
+// @ts-ignore
+const getFullPhoneInfo = async(req, phoneId: string) => {
+  const filePath = path.join(__dirname, `/data/phones/${phoneId}.json`);
 
-  if (result) {
+  try {
+    const jsonData = await fs.readFile(filePath, 'utf8');
+    const phone = JSON.parse(jsonData);
+
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+
     const phoneWithImageUrl = {
-      ...result.toObject(),
-      image: `/${result.image}`,
+      ...phone,
+      images: [...phone.images].map(image => `${baseUrl}/${image}`),
     };
 
     return phoneWithImageUrl;
+  } catch (error) {
+    throw HttpError(500, 'Error reading JSON file');
   }
-
-  return null;
 };
 
-export default { getAll, getById };
+export default { getAll, getFullPhoneInfo };

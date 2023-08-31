@@ -1,13 +1,11 @@
 import express from 'express';
 
-import ctrl from '../../controllers/phones';
+import phoneController from '../../controllers/phones';
 
 const router = express.Router();
 
-router.get('/', ctrl.getAll);
-
-router.get('/:id', ctrl.getById);
-
-router.get('/:imagePath', ctrl.getImg);
+router.get('/', phoneController.getAll);
+router.get('/:id', phoneController.getById);
+router.get('/images/:imagePath', phoneController.getImg);
 
 export default router;

@@ -19,8 +19,8 @@ if (!DB_HOST) {
 const app = express();
 
 app.use(express.static('public'));
-
-console.log(__dirname);
+app.use(cors());
+app.use(express.json());
 
 mongoose
   .connect(DB_HOST)
@@ -29,11 +29,9 @@ mongoose
       console.log(`Server is running on port ${PORT}`);
     }))
   .catch((error) => {
-    console.log(error.message);
+    console.log('Database connection error:', error);
     process.exit(1);
   });
-
-app.use(cors());
 
 app.use('/api/phones', phonesRouter);
 
