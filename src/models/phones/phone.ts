@@ -42,7 +42,7 @@ const phoneSchema = new Schema({
     type: String,
   },
   year: {
-    type: String,
+    type: Number,
   },
   image: {
     type: String,
