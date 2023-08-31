@@ -20,6 +20,8 @@ const app = express();
 
 app.use(express.static('public'));
 
+console.log(__dirname);
+
 mongoose
   .connect(DB_HOST)
   .then(() =>

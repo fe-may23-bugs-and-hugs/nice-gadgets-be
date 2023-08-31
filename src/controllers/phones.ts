@@ -7,7 +7,7 @@ const getAll = async(req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 16;
 
-    const result = await phones.getAll(page, limit);
+    const result = await phones.getAll(req, page, limit);
 
     res.send(result);
   } catch (error) {

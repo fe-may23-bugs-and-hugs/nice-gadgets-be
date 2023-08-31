@@ -1,7 +1,8 @@
 import Phone from './phone';
 import HttpError from '../../helpers/HttpError';
 
-const getAll = async(page: number, limit: number) => {
+// @ts-ignore
+const getAll = async(req, page: number, limit: number) => {
   const totalItems = await Phone.countDocuments();
   const totalPages = Math.ceil(totalItems / limit);
 
@@ -13,9 +14,11 @@ const getAll = async(page: number, limit: number) => {
     .skip((page - 1) * limit)
     .limit(limit);
 
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+
   const phonesWithImageUrls = phonesOnPage.map(phone => ({
     ...phone.toObject(),
-    image: `/${phone.image}`,
+    image: `${baseUrl}/${phone.image}`,
   }));
 
   return {
