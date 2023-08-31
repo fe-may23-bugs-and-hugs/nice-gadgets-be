@@ -7,6 +7,8 @@ import fs from 'fs/promises';
 const getAll = async(req, page: number, limit: number) => {
   const totalItems = await Phone.countDocuments();
   const totalPages = Math.ceil(totalItems / limit);
+  const sortField = req.query.sortBy || 'name';
+  const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
 
   if (page < 1 || page > totalPages) {
     throw HttpError(400, 'Invalid page number');
@@ -14,7 +16,8 @@ const getAll = async(req, page: number, limit: number) => {
 
   const phonesOnPage = await Phone.find()
     .skip((page - 1) * limit)
-    .limit(limit);
+    .limit(limit)
+    .sort({ [sortField]: sortOrder });
 
   const baseUrl = `${req.protocol}://${req.get('host')}`;
 
