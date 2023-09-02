@@ -4,10 +4,9 @@ import phones from '../models/phones';
 // @ts-ignore
 const getAll = async(req, res, next) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 16;
+    const { page = 1, limit = 16 } = req.query;
 
-    const result = await phones.getAll(req, page, limit);
+    const result = await phones.getAll(req, parseInt(page), parseInt(limit));
 
     res.send(result);
   } catch (error) {
@@ -19,7 +18,7 @@ const getAll = async(req, res, next) => {
 const getById = async(req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await phones.getFullPhoneInfo(req, id);
+    const result = await phones.getById(req, id);
 
     if (!result) {
       throw HttpError(404, 'Not found');

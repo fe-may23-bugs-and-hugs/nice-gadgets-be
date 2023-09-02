@@ -1,14 +1,14 @@
 import Phone from './phone';
 import HttpError from '../../helpers/HttpError';
-import path from 'path';
-import fs from 'fs/promises';
 
 // @ts-ignore
 const getAll = async(req, page: number, limit: number) => {
   const totalItems = await Phone.countDocuments();
   const totalPages = Math.ceil(totalItems / limit);
-  const sortField = req.query.sort || 'name';
-  const sortOrder = req.query.order === 'desc' ? -1 : 1;
+
+  const { sort, order } = req.query;
+  const sortField = sort || 'name';
+  const sortOrder = order === 'desc' ? -1 : 1;
 
   if (page < 1 || page > totalPages) {
     throw HttpError(400, 'Invalid page number');
@@ -17,13 +17,14 @@ const getAll = async(req, page: number, limit: number) => {
   const phonesOnPage = await Phone.find()
     .skip((page - 1) * limit)
     .limit(limit)
-    .sort({ [sortField]: sortOrder });
+    .sort({ [sortField]: sortOrder })
+    .lean();
 
   const baseUrl = `${req.protocol}://${req.get('host')}`;
 
   const phonesWithImageUrls = phonesOnPage.map(phone => ({
-    ...phone.toObject(),
-    image: `${baseUrl}/${phone.image}`,
+    ...phone,
+    images: phone.images.map(image => `${baseUrl}/${image}`),
   }));
 
   return {
@@ -35,24 +36,25 @@ const getAll = async(req, page: number, limit: number) => {
 };
 
 // @ts-ignore
-const getFullPhoneInfo = async(req, phoneId: string) => {
-  const filePath = path.join(__dirname, `/data/phones/${phoneId}.json`);
-
+const getById = async(req, phoneId: string) => {
   try {
-    const jsonData = await fs.readFile(filePath, 'utf8');
-    const phone = JSON.parse(jsonData);
+    const product = await Phone.findById(phoneId).lean();
+
+    if (!product) {
+      throw HttpError(404, 'Product not found');
+    }
 
     const baseUrl = `${req.protocol}://${req.get('host')}`;
 
-    const phoneWithImageUrl = {
-      ...phone,
-      images: [...phone.images].map(image => `${baseUrl}/${image}`),
+    const productWithImageUrl = {
+      ...product,
+      images: product.images.map(image => `${baseUrl}/${image}`),
     };
 
-    return phoneWithImageUrl;
+    return productWithImageUrl;
   } catch (error) {
     throw HttpError(500, 'Error reading JSON file');
   }
 };
 
-export default { getAll, getFullPhoneInfo };
+export default { getAll, getById };
