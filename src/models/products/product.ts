@@ -1,12 +1,29 @@
-import PhoneModel from './phoneModel';
+import ProductModel from './productModel';
 import HttpError from '../../helpers/HttpError';
 import { Request as ExpressRequest } from 'express';
 
 const getAll = async(req: ExpressRequest, page: number, limit: number) => {
-  const totalItems = await PhoneModel.countDocuments();
+  const { productType, sort, order } = req.query;
+
+  const query = {};
+
+  if (productType) {
+    // @ts-ignore
+    query.category = productType;
+  }
+
+  const totalItems = await ProductModel.countDocuments(query);
   const totalPages = Math.ceil(totalItems / limit);
 
-  const { sort, order } = req.query;
+  if (totalItems === 0) {
+    return {
+      data: [],
+      totalItems: 0,
+      totalPages: 0,
+      currentPage: page,
+    };
+  }
+
   const sortField = sort || 'name';
   const sortOrder = order === 'desc' ? -1 : 1;
 
@@ -14,7 +31,7 @@ const getAll = async(req: ExpressRequest, page: number, limit: number) => {
     throw HttpError(400, 'Invalid page number');
   }
 
-  const productsOnPage = await PhoneModel.find()
+  const productsOnPage = await ProductModel.find(query)
     .skip((page - 1) * limit)
     .limit(limit)
     .sort({ [sortField as string]: sortOrder })
@@ -36,7 +53,7 @@ const getAll = async(req: ExpressRequest, page: number, limit: number) => {
 };
 
 const getById = async(req: ExpressRequest, productId: string) => {
-  const product = await PhoneModel.findById(productId).lean();
+  const product = await ProductModel.findById(productId).lean();
 
   if (!product) {
     throw HttpError(404, 'Product not found');
@@ -53,7 +70,7 @@ const getById = async(req: ExpressRequest, productId: string) => {
 };
 
 const getNew = async(req: ExpressRequest) => {
-  const newProducts = await PhoneModel.find()
+  const newProducts = await ProductModel.find()
     .sort({ year: -1 })
     .limit(10)
     .lean();
@@ -68,7 +85,7 @@ const getNew = async(req: ExpressRequest) => {
 };
 
 const getDiscount = async(req: ExpressRequest) => {
-  const discountProducts = await PhoneModel.aggregate([
+  const discountProducts = await ProductModel.aggregate([
     {
       $addFields: {
         priceDifference: { $subtract: ['$priceRegular', '$priceDiscount'] },
@@ -97,7 +114,7 @@ const getDiscount = async(req: ExpressRequest) => {
 };
 
 const getRecommended = async(req: ExpressRequest) => {
-  const recommendedProducts = await PhoneModel.aggregate([
+  const recommendedProducts = await ProductModel.aggregate([
     { $sample: { size: 10 } },
   ]).exec();
 

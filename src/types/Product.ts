@@ -1,4 +1,4 @@
-interface Phone {
+interface Product {
   _id: string;
   namespaceId: string;
   name: string;
@@ -24,4 +24,4 @@ interface Phone {
   year: number;
 }
 
-export default Phone;
+export default Product;

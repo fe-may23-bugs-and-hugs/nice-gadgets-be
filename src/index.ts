@@ -4,7 +4,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-import phonesRouter from './routes/api/phones';
+import productsRouter from './routes/api/products';
 import ResponseError from './types/Error';
 
 dotenv.config();
@@ -33,7 +33,7 @@ mongoose
     process.exit(1);
   });
 
-app.use('/api/phones', phonesRouter);
+app.use('/api/products', productsRouter);
 
 // @ts-ignore
 app.use((err: ResponseError, _req, res, _next) => {
