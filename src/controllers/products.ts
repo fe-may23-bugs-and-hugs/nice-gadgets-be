@@ -1,5 +1,5 @@
 import HttpError from '../helpers/HttpError';
-import phones from '../models/phones/phone';
+import products from '../models/products/product';
 import {
   Request as ExpressRequest,
   Response as ExpressResponse,
@@ -15,7 +15,7 @@ const getAll = async(
     const page = req.query.page ? String(req.query.page) : '1';
     const limit = req.query.limit ? String(req.query.limit) : '16';
 
-    const result = await phones.getAll(req, parseInt(page), parseInt(limit));
+    const result = await products.getAll(req, parseInt(page), parseInt(limit));
 
     res.send(result);
   } catch (error) {
@@ -30,7 +30,7 @@ const getById = async(
 ) => {
   try {
     const { id } = req.params;
-    const result = await phones.getById(req, id);
+    const result = await products.getById(req, id);
 
     if (!result) {
       throw HttpError(404, 'Not found');
@@ -48,7 +48,7 @@ const getNew = async(
   next: ExpressNext,
 ) => {
   try {
-    const result = await phones.getNew(req);
+    const result = await products.getNew(req);
 
     if (!result) {
       throw HttpError(404, 'Not found');
@@ -66,7 +66,7 @@ const getDiscount = async(
   next: ExpressNext,
 ) => {
   try {
-    const result = await phones.getDiscount(req);
+    const result = await products.getDiscount(req);
 
     if (!result) {
       throw HttpError(404, 'Not found');
@@ -84,7 +84,7 @@ const getRecommended = async(
   next: ExpressNext,
 ) => {
   try {
-    const result = await phones.getRecommended(req);
+    const result = await products.getRecommended(req);
 
     if (!result) {
       throw HttpError(404, 'Not found');

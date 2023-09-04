@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const phoneSchema = new Schema({
+const productSchema = new Schema({
   _id: { type: String, required: true },
   namespaceId: { type: String, required: true },
   name: { type: String, required: true },
@@ -28,6 +28,6 @@ const phoneSchema = new Schema({
   year: { type: Number, required: true },
 });
 
-const PhoneModel = model('phone', phoneSchema);
+const ProductModel = model('product', productSchema);
 
-export default PhoneModel;
+export default ProductModel;
