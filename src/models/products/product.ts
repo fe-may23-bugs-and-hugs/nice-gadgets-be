@@ -39,9 +39,9 @@ const getAll = async(req: ExpressRequest, page: number, limit: number) => {
 
   const baseUrl = `${req.protocol}://${req.get('host')}`;
 
-  const productsWithImageUrls = productsOnPage.map(product => ({
+  const productsWithImageUrls = productsOnPage.map((product) => ({
     ...product,
-    images: product.images.map(image => `${baseUrl}/${image}`),
+    images: product.images.map((image) => `${baseUrl}/${image}`),
   }));
 
   return {
@@ -63,7 +63,7 @@ const getById = async(req: ExpressRequest, productId: string) => {
 
   const productWithImageUrl = {
     ...product,
-    images: product.images.map(image => `${baseUrl}/${image}`),
+    images: product.images.map((image) => `${baseUrl}/${image}`),
   };
 
   return productWithImageUrl;
@@ -76,9 +76,9 @@ const getNew = async(req: ExpressRequest) => {
     .lean();
 
   const baseUrl = `${req.protocol}://${req.get('host')}`;
-  const newProductsWithImageUrls = newProducts.map(product => ({
+  const newProductsWithImageUrls = newProducts.map((product) => ({
     ...product,
-    images: product.images.map(image => `${baseUrl}/${image}`),
+    images: product.images.map((image) => `${baseUrl}/${image}`),
   }));
 
   return newProductsWithImageUrls;
@@ -105,7 +105,7 @@ const getDiscount = async(req: ExpressRequest) => {
   ]).exec();
 
   const baseUrl = `${req.protocol}://${req.get('host')}`;
-  const discountProductsWithImageUrls = discountProducts.map(product => ({
+  const discountProductsWithImageUrls = discountProducts.map((product) => ({
     ...product,
     images: product.images.map((image: string) => `${baseUrl}/${image}`),
   }));
@@ -119,14 +119,20 @@ const getRecommended = async(req: ExpressRequest) => {
   ]).exec();
 
   const baseUrl = `${req.protocol}://${req.get('host')}`;
-  const recommendedProductsWithImageUrls = recommendedProducts.map(product => ({
-    ...product,
-    images: product.images.map((image: string) => `${baseUrl}/${image}`),
-  }));
+  const recommendedProductsWithImageUrls = recommendedProducts.map(
+    (product) => ({
+      ...product,
+      images: product.images.map((image: string) => `${baseUrl}/${image}`),
+    }),
+  );
 
   return recommendedProductsWithImageUrls;
 };
 
 export default {
-  getAll, getById, getNew, getDiscount, getRecommended,
+  getAll,
+  getById,
+  getNew,
+  getDiscount,
+  getRecommended,
 };

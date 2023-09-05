@@ -111,5 +111,10 @@ const getImg = async(
 };
 
 export default {
-  getAll, getById, getImg, getNew, getDiscount, getRecommended,
+  getAll,
+  getById,
+  getImg,
+  getNew,
+  getDiscount,
+  getRecommended,
 };
