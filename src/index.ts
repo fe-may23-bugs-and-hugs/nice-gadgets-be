@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 import productsRouter from './routes/api/products';
+import userRouter from './routes/auth';
 import ResponseError from './types/Error';
 
 dotenv.config();
@@ -34,6 +35,7 @@ mongoose
   });
 
 app.use('/api/products', productsRouter);
+app.use('/auth', userRouter);
 
 // @ts-ignore
 app.use((err: ResponseError, _req, res, _next) => {
