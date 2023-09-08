@@ -37,7 +37,7 @@ const getAll = async(req: ExpressRequest, page: number, limit: number) => {
     .sort({ [sortField as string]: sortOrder })
     .lean();
 
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const baseUrl = `${req.protocol}s://${req.get('host')}`;
 
   const productsWithImageUrls = productsOnPage.map((product) => ({
     ...product,
@@ -59,7 +59,7 @@ const getById = async(req: ExpressRequest, productId: string) => {
     throw HttpError(404, 'Product not found');
   }
 
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const baseUrl = `${req.protocol}s://${req.get('host')}`;
 
   const productWithImageUrl = {
     ...product,
@@ -75,7 +75,7 @@ const getNew = async(req: ExpressRequest) => {
     .limit(10)
     .lean();
 
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const baseUrl = `${req.protocol}s://${req.get('host')}`;
   const newProductsWithImageUrls = newProducts.map((product) => ({
     ...product,
     images: product.images.map((image) => `${baseUrl}/${image}`),
@@ -104,7 +104,7 @@ const getDiscount = async(req: ExpressRequest) => {
     },
   ]).exec();
 
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const baseUrl = `${req.protocol}s://${req.get('host')}`;
   const discountProductsWithImageUrls = discountProducts.map((product) => ({
     ...product,
     images: product.images.map((image: string) => `${baseUrl}/${image}`),
@@ -118,7 +118,7 @@ const getRecommended = async(req: ExpressRequest) => {
     { $sample: { size: 10 } },
   ]).exec();
 
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const baseUrl = `${req.protocol}s://${req.get('host')}`;
   const recommendedProductsWithImageUrls = recommendedProducts.map(
     (product) => ({
       ...product,
